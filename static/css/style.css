@@ -528,3 +528,30 @@ a { color: inherit; text-decoration: none; }
     .nav-links a:not(.nav-cta) { display: none; }
     .hero { padding: 3rem 1rem 2rem; }
 }
+/* Terms page styling */
+.article-terms {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.article-terms h1.hero-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.article-terms section {
+    margin-bottom: 1.5rem;
+}
+
+.article-terms h2 {
+    font-size: 1.4rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.article-terms p {
+    line-height: 1.5;
+    color: var(--ink-faint);
+    text-align: justify;
+}
