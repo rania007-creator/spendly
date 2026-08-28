@@ -23,8 +23,8 @@ def login():
 
 
 @app.route("/terms")
-    def terms():
-        return render_template("terms.html")
+def terms():
+    return render_template("terms.html")
 @app.route("/logout")
 def logout():
     return "Logout — coming in Step 3"
