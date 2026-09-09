@@ -58,6 +58,75 @@
   </div>
 </section>
 
+<!-- Modal: See how it works -->
+<div id="howItWorksModal" class="modal hidden">
+  <div class="modal-content">
+    <button class="modal-close" aria-label="Close modal">&times;</button>
+    <iframe id="howItWorksIframe"
+            src=""
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const openBtn = document.querySelector('.hero-actions a[href="#"]');
+    const modal = document.getElementById('howItWorksModal');
+    const closeBtn = modal.querySelector('.modal-close');
+    const iframe = modal.querySelector('#howItWorksIframe');
+    const videoUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&enablejsapi=1";
+
+    function openModal() {
+      iframe.src = videoUrl;
+      modal.classList.remove('hidden');
+      modal.style.display = 'block';
+    }
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+      iframe.src = "";
+    }
+
+    openBtn.addEventListener('click', function(e){ e.preventDefault(); openModal(); });
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if(e.target===modal){ closeModal(); }});
+  });
+</script>
+<style>
+.modal {
+  position: fixed;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+.modal.hidden{display:none;}
+.modal-content{
+  position:relative;
+  background:#fff;
+  width:80%;
+  max-width:800px;
+  max-height:90vh;
+  border-radius:8px;
+  overflow:hidden;
+}
+.modal-close{
+  position:absolute;
+  top:10px; right:10px;
+  background:none; border:none;
+  font-size:1.5rem; cursor:pointer;
+}
+.modal iframe{
+  width:100%;
+  height:calc(90vh - 16px);
+  border:0;
+}
+</style>
+
 <section class="features">
   <div class="features-inner">
     <div class="feature-card">
