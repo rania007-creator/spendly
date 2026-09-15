@@ -1,20 +1,14 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, g
+from database.db import get_db, init_db, seed_db
 app = Flask(__name__)
-
-
-# ------------------------------------------------------------------ #
-# Routes                                                              #
-# ------------------------------------------------------------------ #
 
 @app.route("/")
 def landing():
     return render_template("landing.html")
 
-
 @app.route("/register")
 def register():
     return render_template("register.html")
-
 
 @app.route("/login")
 def login():
@@ -24,40 +18,36 @@ def login():
 def terms():
     return render_template("terms.html")
 
-
 @app.route("/privacy")
 def privacy():
     return render_template("privacy.html")
 
+# ------------------------------------------------------------------ #
+# Database lifecycle helpers                                          #
+# ------------------------------------------------------------------ #
+
+@app.teardown_appcontext
+def close_db(error=None):
+    """Close the SQLite connection after each request."""
+    db = getattr(g, "sqlite_db", None)
+    if db is not None:
+        db.close()
 
 # ------------------------------------------------------------------ #
-# Placeholder routes — students will implement these                  #
+# Flask‑CLI commands – used by developers to bootstrap the DB      #
 # ------------------------------------------------------------------ #
 
-@app.route("/logout")
-def logout():
-    return "Logout — coming in Step 3"
+@app.cli.command("init-db")
+def init_db_command():
+    """Initialize the database schema in a fresh SQLite file."""
+    init_db()
+    print("Initialized the database schema.")
 
-
-@app.route("/profile")
-def profile():
-    return "Profile page — coming in Step 4"
-
-
-@app.route("/expenses/add")
-def add_expense():
-    return "Add expense — coming in Step 7"
-
-
-@app.route("/expenses/<int:id>/edit")
-def edit_expense(id):
-    return "Edit expense — coming in Step 8"
-
-
-@app.route("/expenses/<int:id>/delete")
-def delete_expense(id):
-    return "Delete expense — coming in Step 9"
-
+@app.cli.command("seed-db")
+def seed_db_command():
+    """Populate the database with a demo user and sample expenses."""
+    seed_db()
+    print("Seeded the database with sample data.")
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
