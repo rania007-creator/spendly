@@ -49,5 +49,17 @@ def seed_db_command():
     seed_db()
     print("Seeded the database with sample data.")
 
+# ------------------------------------------------------------------ #
+# Bootstrap the database on application startup (app.app_context())   #
+# ------------------------------------------------------------------ #
+
+# Ensure the database is initialized and seeded before the app starts.
+# This runs automatically when the Flask application is executed
+# directly (e.g., python app.py). It is wrapped in an app context to
+# provide the required Flask request state.
+with app.app_context():
+    init_db()
+    seed_db()
+
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
