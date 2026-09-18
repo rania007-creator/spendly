@@ -1,17 +1,3 @@
----
-description: Create a single dummy user in the database
-allowed-tools: Read, Bash(python3:*)
----
-
-Read database/db.py to confirm the users table schema 
-and database file path. Do NOT use get_db() or Flask's 
-`g` object — this script runs standalone with no Flask 
-app context, so connect to the database directly using 
-Python's sqlite3 module.
-
-Write and run this Python script using Bash:
-
-```python
 import sqlite3
 import random
 from datetime import datetime
@@ -54,9 +40,3 @@ print(f"name: {name}")
 print(f"email: {email}")
 
 conn.close()
-```
-
-Run this script via Bash and print its exact stdout output 
-back to the user as confirmation. If the script raises any 
-error, print the full error message rather than reporting 
-success.
