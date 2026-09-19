@@ -1,6 +1,6 @@
 ---
 description: Create a spec file and feature branch for the next Spendly step
-argument-hint: "Step number and feature name e.g. 2 registeration"
+argument-hint: "Step number and feature name e.g. 2 registration"
 allowed-tools: Read, Write, Glob, Bash(git:*)
 ---
 
@@ -21,16 +21,16 @@ From $ARGUMENTS extract:
 1. `step_number` — zero-padded to 2 digits: 2 → 02, 11 → 11
 
 2. `feature_title` — human readable title in Title Case
-   - Example: "Registeration" or "Login and Logout"
+   - Example: "Registration" or "Login and Logout"
 
 3. `feature_slug` — git and file safe slug
    - Lowercase, kebab-case
    - Only a-z, 0-9 and -
    - Maximum 40 characters
-   - Example: registeration, login-logout
+   - Example: registration, login-logout
 
 4. `branch_name` — format: `feature/<feature_slug>`
-   - Example: `feature/registeration`
+   - Example: `feature/registration`
 
 If you cannot infer these from $ARGUMENTS, ask the user
 to clarify before proceeding.
@@ -38,7 +38,7 @@ to clarify before proceeding.
 ## Step 3 — Check branch name is not taken
 Run `git branch` to list existing branches.
 If `branch_name` is already taken, append a number:
-`feature/registeration-01`, `feature/registeration-02` etc.
+`feature/registration-01`, `feature/registration-02` etc.
 
 ## Step 4 — Switch to main and pull latest
 Run:
