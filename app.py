@@ -35,7 +35,7 @@ def register():
         elif not password:
             error = "Password is required."
         # Password policy
-        elif len(password) < 8 or not re.search(r"(?=.*[A-Za-z])(?=.*\\d)", password):
+        elif len(password) < 8 or not re.search(r"(?=.*[A-Za-z])(?=.*\d)", password):
             error = "Password must be at least 8 characters, include a letter and a number."
         # Email format
         elif not re.match(r"^[^@]+@[^@]+\.[^@]+$", email):
