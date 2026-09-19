@@ -1,8 +1,24 @@
 from flask import Flask, render_template, g, request, redirect, url_for, session
+from functools import wraps
 import re
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 from database.db import get_db, init_db, seed_db
+
+
+def is_authenticated():
+    """Return True if a user id exists in the session."""
+    return session.get("user_id") is not None
+
+
+def login_required(view):
+    """Decorator that redirects to /login if the user is not logged‑in."""
+    @wraps(view)
+    def wrapped_view(**kwargs):
+        if not is_authenticated():
+            return redirect(url_for("login"))
+        return view(**kwargs)
+    return wrapped_view
 
 # ------------------------------------------------------------------ #
 # Flask app setup                                                   #
@@ -66,6 +82,36 @@ def register():
 @app.route("/login")
 def login():
     return render_template("login.html")
+
+# POST handler for login
+@app.route("/login", methods=["POST"])
+def login_post():
+    """Handle user login. Validates credentials, logs in, redirects."""
+    email = request.form.get("email", "").strip()
+    password = request.form.get("password", "")
+    error = None
+
+    if not email or not password:
+        error = "Email and password are required."
+    else:
+        db = get_db()
+        user = db.execute(
+            "SELECT id, password_hash FROM users WHERE email = ?", (email,)
+        ).fetchone()
+        if user is None or not check_password_hash(user["password_hash"], password):
+            error = "Invalid credentials."
+
+    if error:
+        return render_template("login.html", error=error, email=email)
+
+    session["user_id"] = user["id"]
+    return redirect(url_for("landing"))
+
+@app.route("/logout")
+@login_required
+def logout():
+    session.clear()
+    return redirect(url_for("landing"))
 
 @app.route("/terms")
 def terms():
