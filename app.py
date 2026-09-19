@@ -20,6 +20,7 @@ def landing():
 # ------------------------------------------------------------------ #
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """Handle user registration. Supports GET to show form and POST to process data."""
     if request.method == "POST":
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip()
