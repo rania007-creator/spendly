@@ -20,6 +20,19 @@ def login_required(view):
         return view(**kwargs)
     return wrapped_view
 
+# Helper for avatar initials
+
+def _avatar_initials(name: str) -> str:
+    """Return the first letters of the first two words of the name.
+    If only one word, use its first two characters.
+    """
+    parts = name.strip().split()
+    if not parts:
+        return "?"
+    if len(parts) == 1:
+        return parts[0][:2].upper()
+    return (parts[0][0] + parts[1][0]).upper()
+
 # ------------------------------------------------------------------ #
 # Flask app setup                                                   #
 # ------------------------------------------------------------------ #
@@ -75,6 +88,9 @@ def register():
         db.commit()
         user_id = cursor.lastrowid
         session["user_id"] = user_id
+        # Store name and email for navbar display
+        session["name"] = name
+        session["email"] = email
         return redirect(url_for("landing"))
 
     return render_template("register.html")
@@ -105,6 +121,9 @@ def login_post():
         return render_template("login.html", error=error, email=email)
 
     session["user_id"] = user["id"]
+    # Store name and email for navbar display
+    session["name"] = user["name"]
+    session["email"] = user["email"]
     return redirect(url_for("landing"))
 
 @app.route("/logout")
@@ -120,6 +139,37 @@ def terms():
 @app.route("/privacy")
 def privacy():
     return render_template("privacy.html")
+
+# ------------------------------------------------------------------ #
+# Profile route
+# ------------------------------------------------------------------ #
+@app.route("/profile")
+@login_required
+def profile():
+    context = {
+        "user": {
+            "name": session.get("name", "User"),
+            "email": session.get("email", "user@example.com"),
+            "avatar_initials": _avatar_initials(session.get("name", "User")),
+            "member_since": "2023-01-01",
+        },
+        "summary": {
+            "total_spent": 1234.56,
+            "transaction_count": 42,
+            "top_category": "Food",
+        },
+        "transactions": [
+            {"date": "2025-09-19", "description": "Groceries", "category": "Food", "amount": 12.34},
+            {"date": "2025-09-18", "description": "Taxi", "category": "Transport", "amount": 23.45},
+            {"date": "2025-09-17", "description": "Lunch", "category": "Food", "amount": 9.99},
+        ],
+        "categories": [
+            {"name": "Food", "total": 256.78},
+            {"name": "Transport", "total": 120.50},
+            {"name": "Bills", "total": 420.00},
+        ],
+    }
+    return render_template("profile.html", **context)
 
 # ------------------------------------------------------------------ #
 # Database lifecycle helpers                                          #

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+  <section class="profile-page">
+    <div class="profile-card">
+      <div class="profile-avatar">
+        {{ user.avatar_initials }}
+      </div>
+      <h2 class="profile-name">{{ user.name }}</h2>
+      <p class="profile-email">{{ user.email }}</p>
+      <small class="profile-since">Member since {{ user.member_since }}</small>
+    </div>
+
+    <div class="profile-summary">
+      <div class="stat total-spent">Total spent: ${{ "{:.2f}".format(summary.total_spent) }}</div>
+      <div class="stat txns">Transactions: {{ summary.transaction_count }}</div>
+      <div class="stat top-cat">Top: {{ summary.top_category }}</div>
+    </div>
+
+    <table class="profile-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in transactions %}
+        <tr>
+          <td>{{ t.date }}</td>
+          <td>{{ t.description }}</td>
+          <td><span class="badge">{{ t.category }}</span></td>
+          <td>${{ "{:.2f}".format(t.amount) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <ul class="profile-category-list">
+      {% for c in categories %}
+        <li>{{ c.name }}: ${{ "{:.2f}".format(c.total) }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endblock %}
