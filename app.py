@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g, request, redirect, url_for, session
+﻿from flask import Flask, render_template, g, request, redirect, url_for, session
 from functools import wraps
 import re
 import os
@@ -112,7 +112,7 @@ def login_post():
     else:
         db = get_db()
         user = db.execute(
-            "SELECT id, password_hash FROM users WHERE email = ?", (email,)
+            "SELECT * FROM users WHERE email = ?", (email,)
         ).fetchone()
         if user is None or not check_password_hash(user["password_hash"], password):
             error = "Invalid credentials."
